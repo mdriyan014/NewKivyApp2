@@ -25,21 +25,18 @@ jobs:
         pip install --upgrade pip
         pip install buildozer cython
 
-    - name: Install Android SDK & accept licenses
+    - name: Force install Android SDK Build-Tools 33.0.2
       run: |
-        mkdir -p $HOME/.android && touch $HOME/.android/repositories.cfg
         wget https://dl.google.com/android/repository/commandlinetools-linux-8512546_latest.zip -O cmdline-tools.zip
-        unzip cmdline-tools.zip -d $HOME/
+        unzip cmdline-tools.zip -d $HOME/android-sdk/
         mkdir -p $HOME/android-sdk/cmdline-tools/latest
-        mv $HOME/cmdline-tools/* $HOME/android-sdk/cmdline-tools/latest/
-        chmod +x $HOME/android-sdk/cmdline-tools/latest/bin/*
-        export PATH=$PATH:$HOME/android-sdk/cmdline-tools/latest/bin
-        yes | sdkmanager --sdk_root=$HOME/android-sdk "platform-tools" "platforms;android-31" "build-tools;31.0.0" "ndk;25.2.9519653"
-        yes | sdkmanager --sdk_root=$HOME/android-sdk --licenses
+        mv $HOME/android-sdk/cmdline-tools/cmdline-tools/* $HOME/android-sdk/cmdline-tools/latest/
+        yes | $HOME/android-sdk/cmdline-tools/latest/bin/sdkmanager --sdk_root=$HOME/android-sdk "platform-tools" "platforms;android-33" "build-tools;33.0.2"
 
     - name: Build APK
+      env:
+        ANDROID_SDK_ROOT: ${{ github.workspace }}/../android-sdk
       run: |
-        export ANDROID_SDK_ROOT=$HOME/android-sdk
         buildozer android debug
 
     - name: Upload APK
