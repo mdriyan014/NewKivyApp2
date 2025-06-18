@@ -32,8 +32,10 @@ jobs:
         unzip cmdline-tools.zip -d $HOME/cmdline-tools
         mkdir -p $HOME/android-sdk/cmdline-tools
         mv $HOME/cmdline-tools $HOME/android-sdk/cmdline-tools/latest
-        yes | $HOME/android-sdk/cmdline-tools/latest/bin/sdkmanager --sdk_root=$HOME/android-sdk "platform-tools" "platforms;android-31" "build-tools;31.0.0" "ndk;25.2.9519653"
-        yes | $HOME/android-sdk/cmdline-tools/latest/bin/sdkmanager --licenses
+        chmod +x $HOME/android-sdk/cmdline-tools/latest/bin/*
+        export PATH=$PATH:$HOME/android-sdk/cmdline-tools/latest/bin
+        yes | sdkmanager --sdk_root=$HOME/android-sdk "platform-tools" "platforms;android-31" "build-tools;31.0.0" "ndk;25.2.9519653"
+        yes | sdkmanager --sdk_root=$HOME/android-sdk --licenses
 
     - name: Build APK
       run: |
