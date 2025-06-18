@@ -9,9 +9,6 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
-    env:
-      ANDROID_SDK_ROOT: /usr/lib/android-sdk
-
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
@@ -24,14 +21,9 @@ jobs:
     - name: Install dependencies
       run: |
         sudo apt update
-        sudo apt install -y zip unzip openjdk-17-jdk python3-pip python3-setuptools python3-wheel python3-virtualenv adb android-sdk
+        sudo apt install -y zip unzip openjdk-17-jdk python3-pip python3-setuptools python3-wheel python3-virtualenv adb
         pip install --upgrade pip
         pip install buildozer cython
-
-    - name: Accept licenses and install SDK build-tools
-      run: |
-        echo "y" | sdkmanager "build-tools;34.0.0"
-        echo "y" | sdkmanager --licenses
 
     - name: Build APK
       run: |
