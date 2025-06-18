@@ -21,21 +21,16 @@ jobs:
     - name: Install dependencies
       run: |
         sudo apt update
-        sudo apt install -y zip unzip openjdk-17-jdk python3-pip python3-setuptools python3-wheel python3-virtualenv adb wget
+        sudo apt install -y zip unzip openjdk-17-jdk python3-pip python3-setuptools python3-wheel python3-virtualenv adb
         pip install --upgrade pip
         pip install buildozer cython
 
-    - name: Force install Android SDK Build-Tools 33.0.2
+    - name: Accept licenses and install SDK tools
       run: |
-        wget https://dl.google.com/android/repository/commandlinetools-linux-8512546_latest.zip -O cmdline-tools.zip
-        unzip cmdline-tools.zip -d $HOME/android-sdk/
-        mkdir -p $HOME/android-sdk/cmdline-tools/latest
-        mv $HOME/android-sdk/cmdline-tools/cmdline-tools/* $HOME/android-sdk/cmdline-tools/latest/
-        yes | $HOME/android-sdk/cmdline-tools/latest/bin/sdkmanager --sdk_root=$HOME/android-sdk "platform-tools" "platforms;android-33" "build-tools;33.0.2"
+        mkdir -p ~/.android/ && touch ~/.android/repositories.cfg
+        yes | sdkmanager --licenses || true
 
     - name: Build APK
-      env:
-        ANDROID_SDK_ROOT: ${{ github.workspace }}/../android-sdk
       run: |
         buildozer android debug
 
