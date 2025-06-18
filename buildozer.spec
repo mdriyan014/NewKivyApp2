@@ -103,8 +103,6 @@ android.permissions = INTERNET,CAMERA,RECORD_AUDIO,ACCESS_FINE_LOCATION,ACCESS_C
 
 # (int) Target Android API, should be as high as possible.
 android.api = 33
-
-# (str) Android SDK build tools version to use
 android.build_tools = 33.0.2
 
 # (int) Minimum API your APK / AAB will support.
